@@ -4,23 +4,27 @@
       <router-link to="/">HOME</router-link>
       <router-link class="ms-3" to="/about">ABOUT</router-link>
     </nav>
-    <div class="alert alert-primary fade position-absolute" ref="alert" role="alert">A simple primary alert—check it out!</div>
+    <MessageAlert :alertData="alertData"></MessageAlert>
+    <!-- <div class="alert fade position-absolute" ref="alert" role="alert"></div> -->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import emitter from '@/methods/emitter'
+import MessageAlert from '@/components/MessageAlert.vue'
 export default {
+  components: {
+    MessageAlert
+  },
+  data () {
+    return {
+      alertData: {}
+    }
+  },
   mounted () {
     emitter.on('pushMessage', (alertData) => {
-      // console.log(alertData)
-      const alertEl = this.$refs.alert
-      alertEl.classList.add('show', `alert-${alertData.style}`)
-      alertEl.textContent = alertData.msg
-      setTimeout(() => {
-        alertEl.classList.remove('show')
-      }, 1000)
+      this.alertData = { ...alertData }
     })
   }
 }
